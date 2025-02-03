@@ -24,8 +24,8 @@ logging:
   level:
     root: info
     com:
-      spring:
-        jpastudy: debug
+      study:
+        jpa: debug
     org:
       hibernate:
         SQL: debug
