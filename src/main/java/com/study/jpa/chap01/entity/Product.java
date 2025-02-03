@@ -8,7 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
+//@Setter
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -44,6 +44,13 @@ public class Product {
 
     public enum Category {
         FOOD, FASHION, ELECTRONIC
+    }
+
+    // 수정 편의 메서드
+    public void changeProduct(String newName, int newPrice, Category newCategory) {
+        this.name = newName;
+        this.price = newPrice;
+        this.category = newCategory;
     }
 
 }
