@@ -90,6 +90,29 @@ class StudentRepositoryTest {
         students.forEach(System.out::println);
     }
 
+    @Test
+    @DisplayName("JPQL로 학생 조회하기")
+    void jpqlTest() {
+        //given
+        String city = "서울시";
+        //when
+        List<Student> studentList = studentRepository.getStudentsByCity(city);
+        //then
+        studentList.forEach(System.out::println);
+    }
+
+
+    @Test
+    @DisplayName("순수 SQL로 학생정보 조회")
+    void nativeSQLTest() {
+        //given
+        String name = "쿠로미";
+        String city = "청양군";
+        //when
+        List<Student> studentList = studentRepository.getStudentsByName(name, city);
+        //then
+        studentList.forEach(System.out::println);
+    }
 
 
 }
