@@ -27,21 +27,18 @@ class StudentRepositoryTest {
     @BeforeEach
     void insertData() {
         Student s1 = Student.builder()
-                .id(UUID.randomUUID().toString())
                 .name("쿠로미")
                 .city("청양군")
                 .major("경제학")
                 .build();
 
         Student s2 = Student.builder()
-                .id(UUID.randomUUID().toString())
                 .name("춘식이")
                 .city("서울시")
                 .major("컴퓨터공학")
                 .build();
 
         Student s3 = Student.builder()
-                .id(UUID.randomUUID().toString())
                 .name("어피치")
                 .city("제주도")
                 .major("화학공학")

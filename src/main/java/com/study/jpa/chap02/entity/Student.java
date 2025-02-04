@@ -20,6 +20,7 @@ public class Student {
 
     @Id
     @Column(name = "stu_id")
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
     private String id;
 
     @Column(name = "stu_name", nullable = false)
