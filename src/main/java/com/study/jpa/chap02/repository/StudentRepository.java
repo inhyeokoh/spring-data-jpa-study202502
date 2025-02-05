@@ -36,9 +36,9 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     // 순수 SQL 사용하기
     // 이름 또는 도시로 학생정보 조회
     @Query(value = """
-            SELECT * 
+            SELECT *
             FROM tbl_student
-            WHERE stu_name = ?1 
+            WHERE stu_name = ?1
                 OR city = ?2
             """, nativeQuery = true)
     List<Student> getStudentsByName(String name, String city);

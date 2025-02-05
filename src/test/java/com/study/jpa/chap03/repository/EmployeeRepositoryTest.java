@@ -121,13 +121,85 @@ class EmployeeRepositoryTest {
 
         //when
         // 수정 진행
-        foundEmp.setDepartment(newDept);
+//        foundEmp.setDepartment(newDept);
+//        newDept.getEmployees().add(foundEmp);
+
+        foundEmp.changeDepartment(newDept);
 
         //then
         System.out.println("\n\nfoundEmp = " + foundEmp);
         System.out.println("foundEmp.getDepartment = " + foundEmp.getDepartment());
+
+        /*
+            사원정보가 Employee엔터티에서 수정되어도
+            반대편 엔터티인 Department에서는 리스트에 바로 반영되지 않는다.
+
+            해결방안은 데이터 수정시에 반대편 엔터티에도 같이 수정을 해줘라
+         */
+
+        List<Employee> employees = newDept.getEmployees();
+        System.out.println("employees = " + employees);
     }
 
 
+    @Test
+    @DisplayName("양방향 매핑에서 리스트에 데이터를 추가하면 DB에도 INSERT된다.")
+    void persistTest() {
+        //given
+        
+        // 2번 부서 조회
+        Department foundDept = departmentRepository.findById(2L).orElseThrow();
+        
+        // 새로운 사원정보 생성
+        Employee newEmp = Employee.builder()
+                .name("하츄핑")
+                .build();
+        
+        //when
+        foundDept.addEmployee(newEmp);
+
+        em.flush();
+        em.clear();
+        
+        //then
+        Employee employee = employeeRepository.findById(5L).orElseThrow();
+        System.out.println("employee = " + employee);
+        System.out.println("employee.getDepartment() = " + employee.getDepartment());
+    }
+
+
+    @Test
+    @DisplayName("양방향 매핑에서 리스트에 사원을 제거하면 실제 DB에서 삭제된다")
+    void removeTest() {
+        //given
+
+        // 1번 부서 조회
+        Department foundDept = departmentRepository.findById(1L).orElseThrow();
+        // 1번 부서의 모든 사원 조회
+        List<Employee> employees = foundDept.getEmployees();
+
+        // 1번 부서의 첫번째 사원 조회
+        Employee employee = employees.get(0);
+
+        //when
+        foundDept.removeEmployee(employee);
+
+        //then
+    }
+
+    @Test
+    @DisplayName("부서가 제거되면 그 안의 사원들도 제거된다")
+    void deptRemoveTest() {
+        //given
+        Long deptId = 1L;
+        //when
+        departmentRepository.deleteById(deptId);
+
+        //then
+    }
+
+
+
+    
 
 }

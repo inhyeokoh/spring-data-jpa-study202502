@@ -28,6 +28,12 @@ public class Employee {
     @JoinColumn(name = "dept_id") // FK 컬럼명
     private Department department;
 
+    // 부서 수정 편의메서드
+    public void changeDepartment(Department department) {
+        this.department = department;
+        department.getEmployees().add(this);
+    }
+
 }
 
 
