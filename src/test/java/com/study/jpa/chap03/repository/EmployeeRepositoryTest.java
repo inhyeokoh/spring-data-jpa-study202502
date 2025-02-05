@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -88,6 +90,44 @@ class EmployeeRepositoryTest {
         System.out.println("foundEmp.getDepartment() = " + foundEmp.getDepartment());
 
     }
+
+    @Test
+    @DisplayName("특정 부서를 조회하면 해당 소속부서원들이 함께 조회된다.")
+    void findDeptTest() {
+        //given
+        Long deptId = 1L;
+        //when
+        Department foundDept = departmentRepository.findById(deptId).orElseThrow();
+        //then
+        System.out.println("\n\n====== 부서 정보 ======");
+        System.out.println("foundDept = " + foundDept);
+        List<Employee> employees = foundDept.getEmployees();
+        System.out.println("employees = " + employees);
+    }
+
+
+    @Test
+    @DisplayName("양방향 매핑에서 데이터 수정할 때 생기는 문제")
+    void changeTest() {
+        //given
+
+        // 3번 사원의 부서를 2번부서에서 1번 부서로 수정
+
+        // 3번 사원 조회
+        Employee foundEmp = employeeRepository.findById(3L).orElseThrow();
+
+        // 1번 부서를 조회
+        Department newDept = departmentRepository.findById(1L).orElseThrow();
+
+        //when
+        // 수정 진행
+        foundEmp.setDepartment(newDept);
+
+        //then
+        System.out.println("\n\nfoundEmp = " + foundEmp);
+        System.out.println("foundEmp.getDepartment = " + foundEmp.getDepartment());
+    }
+
 
 
 }
