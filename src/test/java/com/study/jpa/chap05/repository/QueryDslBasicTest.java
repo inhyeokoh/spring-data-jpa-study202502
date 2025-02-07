@@ -13,6 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+import static com.study.jpa.chap05.entity.QIdol.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -31,7 +34,7 @@ class QueryDslBasicTest {
     @Autowired
     JdbcTemplate template; // JDBC를 제어하는 객체
 
-//    @Autowired
+    @Autowired
     JPAQueryFactory factory; // QueryDsl을 제어하는 객체
 
     @BeforeEach
@@ -115,7 +118,7 @@ class QueryDslBasicTest {
     @DisplayName("QueryDsl로 특정 이름의 아이돌 조회하기")
     void queryDslTest() {
         //given
-        factory = new JPAQueryFactory(em);
+//        factory = new JPAQueryFactory(em);
 
         QIdol idol = QIdol.idol;
 
@@ -129,6 +132,67 @@ class QueryDslBasicTest {
         System.out.println("\n\nfoundIdol = " + foundIdol);
         System.out.println("foundIdol.getGroup() = " + foundIdol.getGroup());
     }
+
+
+    @Test
+    @DisplayName("이름 + 나이로 아이돌 조회하기")
+    void searchTest() {
+        //given
+        String name = "리즈";
+        int age = 20;
+
+        //when
+        Idol foundIdol = factory
+                .selectFrom(idol)
+                .where(
+                        idol.idolName.eq(name)
+                                .and(idol.age.eq(age))
+                )
+                .fetchOne();
+
+        //then
+        System.out.println("\n\nfoundIdol = " + foundIdol);
+        System.out.println("foundIdol.getGroup() = " + foundIdol.getGroup());
+
+//        idol.idolName.eq("리즈") // idolName = '리즈'
+//        idol.idolName.ne("리즈") // idolName != '리즈'
+//        idol.idolName.eq("리즈").not() // idolName != '리즈'
+//        idol.idolName.isNotNull() //이름이 is not null
+//        idol.age.in(10, 20) // age in (10,20)
+//        idol.age.notIn(10, 20) // age not in (10, 20)
+//        idol.age.between(10,30) //between 10, 30
+//        idol.age.goe(30) // age >= 30
+//        idol.age.gt(30) // age > 30
+//        idol.age.loe(30) // age <= 30
+//        idol.age.lt(30) // age < 30
+//        idol.idolName.like("_김%")  // like _김%
+//        idol.idolName.contains("김") // like %김%
+//        idol.idolName.startsWith("김") // like 김%
+//        idol.idolName.endsWith("김") // like %김
+    }
+
+    @Test
+    @DisplayName("다양한 조회결과 반환")
+    void fetchTest() {
+
+        // fetch: 다중 행 조회
+        List<Idol> idolList = factory
+                .selectFrom(idol)
+                .fetch();
+
+        System.out.println("\n\n=========== fetch ============");
+        idolList.forEach(System.out::println);
+
+        Idol idol = factory
+                .selectFrom(QIdol.idol)
+                .where(QIdol.idol.age.loe(22))
+                .fetchFirst();
+
+        System.out.println("\n\n=========== fetchFirst ============");
+        System.out.println("idol = " + idol);
+
+    }
+
 
 
 }
