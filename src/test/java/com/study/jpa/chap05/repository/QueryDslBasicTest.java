@@ -106,6 +106,7 @@ class QueryDslBasicTest {
                 , rs.getString("idol_name")
                 , rs.getInt("age")
                 , null
+                , null
         ), "가을");
 
         //then
